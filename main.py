@@ -3,37 +3,6 @@ sys.path.append('learners/')
 import pandas as pd
 from ClassifySVM import *
 
-
-def logloss(output):
-    '''
-    Return the logloss evaluator for the given output values
-
-    Params
-    output:    Output probabilities as a DF.
-
-    Returns
-    logloss
-    '''
-    return -(1/nrow(output))*output.sum(axis=1)
-
-def output(test):
-    '''
-    Return a DF with only the predicted columns
-
-    Params
-    test:      Output test Dataframe
-
-    Returns:
-    output:    Output dataframe with only the predicted cols.
-    '''
-    return test[[
-            'Return_to_owner',
-            'Euthanasia',
-            'Adoption',
-            'Transfer',
-            'Died'
-            ]]
-
 print('Reading data to test and train sets')
 train = pd.read_csv('data/train_cleaned.csv')
 test = pd.read_csv('data/test_cleaned.csv')
