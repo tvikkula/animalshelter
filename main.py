@@ -3,7 +3,7 @@ sys.path.append('learners/')
 import pandas as pd
 import RFClassifier
 import numpy as np
-
+from sklearn.cross_validation import train_test_split
 print('Reading data to test and train sets')
 train = pd.read_csv('data/train_cleaned.csv')
 test = pd.read_csv('data/test_cleaned.csv')
@@ -50,10 +50,15 @@ features_test.to_csv('data/test_data.csv', sep=',', encoding='utf-8')
 labels_train.to_csv('data/train_labels.csv', sep=',', enconding='utf-8')
 features_train.to_csv('data/train_data.csv', sep=',', encoding='utf-8')
 
+print('Creating training and validation sets')
+X = features_train
+Y = labels_train
+X_train, X_validate, y_train, y_validate = train_test_split(
+    X, Y, test_size = 0.3, random_state = 42
+)
 print('Creating a fit from training data')
-
-fit = RFClassifier.train(features_train, labels_train)
+fit = RFClassifier.train(X_train, y_train)
 
 print('Evaluating accuracy')
-acc = RFClassifier.test(features_test, labels_test, fit)
+acc = RFClassifier.test(X_validate, y_validate, fit)
 print acc
