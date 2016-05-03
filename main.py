@@ -1,7 +1,8 @@
 import sys
 sys.path.append('learners/')
 import pandas as pd
-from ClassifySVM import *
+import RFClassifier
+import numpy as np
 
 print('Reading data to test and train sets')
 train = pd.read_csv('data/train_cleaned.csv')
@@ -24,41 +25,35 @@ features = [
 
 predicted = 'OutcomeType'
 
-features_for_train = list(features)
-features_for_train.append(predicted)
-
 print('Creating feature and label sets to test and train')
-features_train = train[features_for_train]
-print(features_train.columns.values)
 
 # Create dummies:
-features_train = features_train\
-    .append(pd.get_dummies(features_train.isMix))\
-    .append(pd.get_dummies(features_train.Sex))\
-    .append(pd.get_dummies(features_train.Neutered))\
-    .append(pd.get_dummies(features_train.Breed_formatted))\
-    .append(pd.get_dummies(features_train.OutcomeType))
+features_train = pd.get_dummies(train.isMix, prefix='is')\
+    .join(pd.get_dummies(train.Sex, prefix='is'))\
+    .join(pd.get_dummies(train.Neutered, prefix='is'))
 
-labels_train = features_train[labels]
-print(features)
-features_test = test[features]
+#    .join(pd.get_dummies(train.Breed_formatted, prefix='is'))
 
-features_test = features_test\
-    .append(pd.get_dummies(features_test.isMix))\
-    .append(pd.get_dummies(features_test.Sex))\
-    .append(pd.get_dummies(features_test.Neutered))\
-    .append(pd.get_dummies(features_test.Breed_formatted))\
+labels_train = pd.get_dummies(train.OutcomeType)
 
+features_test = pd.get_dummies(test.isMix, prefix='is')\
+    .join(pd.get_dummies(test.Sex, prefix='is'))\
+    .join(pd.get_dummies(test.Neutered, prefix='is'))
+
+#    .join(pd.get_dummies(test.Breed_formatted, prefix='is'))\
+
+labels_test = pd.DataFrame(columns=labels_train.columns, index = np.arange(len(features_test.index)))
 for label in labels:
-    features_test[label] = 0
+    labels_test[label] = 0
 
-labels_test = features_test[labels]
 features_test.to_csv('data/test_data.csv', sep=',', encoding='utf-8')
+labels_train.to_csv('data/train_labels.csv', sep=',', enconding='utf-8')
 features_train.to_csv('data/train_data.csv', sep=',', encoding='utf-8')
 
 print('Creating a fit from training data')
-fit = classify(features_train, labels_train)
+
+fit = RFClassifier.train(features_train, labels_train)
 
 print('Evaluating accuracy')
-acc = accuracy(features_test, labels_test, fit)
+acc = RFClassifier.test(features_test, labels_test, fit)
 print acc
