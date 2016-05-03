@@ -4,6 +4,7 @@ import pandas as pd
 import RFClassifier
 import numpy as np
 from sklearn.cross_validation import train_test_split
+
 print('Reading data to test and train sets')
 train = pd.read_csv('data/train_cleaned.csv')
 test = pd.read_csv('data/test_cleaned.csv')
@@ -40,7 +41,7 @@ features_test = pd.get_dummies(test.isMix, prefix='is')\
     .join(pd.get_dummies(test.Sex, prefix='is'))\
     .join(pd.get_dummies(test.Neutered, prefix='is'))
 
-#    .join(pd.get_dummies(test.Breed_formatted, prefix='is'))\
+#    .join(pd.get_dummies(test.Breed_formatted, prefix='is'))
 
 labels_test = pd.DataFrame(columns=labels_train.columns, index = np.arange(len(features_test.index)))
 for label in labels:
@@ -53,12 +54,24 @@ features_train.to_csv('data/train_data.csv', sep=',', encoding='utf-8')
 print('Creating training and validation sets')
 X = features_train
 Y = labels_train
-X_train, X_validate, y_train, y_validate = train_test_split(
-    X, Y, test_size = 0.3, random_state = 42
+X_train, X_test, y_train, y_test = train_test_split(
+    X, Y, test_size = 0.25, random_state = 42
 )
+
+X_train, X_validate, y_train, y_validate = train_test_split(
+    X_train, y_train, test_size = 0.3, random_state = 42
+)
+
+print('Hyperparam validation')
+best_fit, rf_grid_scores = RFClassifier.gridsearch(
+    X_validate, y_validate, n = 5
+)
+print(rf_grid_scores)
+print(best_fit)
+
 print('Creating a fit from training data')
-fit = RFClassifier.train(X_train, y_train)
+fit = RFClassifier.train(X_train, y_train, best_fit)
 
 print('Evaluating accuracy')
-acc = RFClassifier.test(X_validate, y_validate, fit)
+acc = RFClassifier.test(X_test, y_test, fit)
 print acc
