@@ -71,7 +71,10 @@ print(best_fit)
 
 print('Creating a fit from training data')
 fit = RFClassifier.train(X_train, y_train, best_fit)
-
+print(type(y_test))
 print('Evaluating accuracy')
-acc = RFClassifier.test(X_test, y_test, fit)
+pred = fit.predict(X_test)
+acc = RFClassifier.test(pred, y_test)
 print acc
+np.save('pred-results', pred)
+np.save('test-results', y_test)
