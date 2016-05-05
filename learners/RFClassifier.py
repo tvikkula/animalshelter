@@ -14,9 +14,7 @@ def train(features_train, labels_train, rfc = None):
     fit = rfc.fit(features_train, labels_train)
     return fit 
 
-def test(features_test, labels_test, model):
-    pred = model.predict(features_test)
-    pp.pprint(pred)
+def test(pred, labels_test):
     acc = accuracy_score(pred, labels_test)
     return acc
                          
