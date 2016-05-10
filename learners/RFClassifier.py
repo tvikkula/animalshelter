@@ -15,8 +15,7 @@ def train(features_train, labels_train, rfc = None):
     return fit 
 
 def test(pred, labels_test):
-    acc = accuracy_score(pred, labels_test)
-    return acc
+    return accuracy_score(pred, labels_test)
                          
 def gridsearch(features_train, labels_train, n):
     clf = RandomForestClassifier(

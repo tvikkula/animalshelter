@@ -50,7 +50,7 @@ train['isMix'] = train.Breed.apply(isMix)
 test['Breed_formatted'] = test.Breed.apply(formatBreed)
 test['isMix'] = test.Breed.apply(isMix)
 
-train.to_csv('data/train_cleaned.csv', sep=',', encoding='utf-8')
-test.to_csv('data/test_cleaned.csv', sep=',', encoding='utf-8')
+train.to_csv('data/train_cleaned.csv', index=False)
+test.to_csv('data/test_cleaned.csv', index=False)
 
 
