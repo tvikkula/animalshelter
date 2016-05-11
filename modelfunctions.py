@@ -17,6 +17,11 @@ def adaclassify(X_train, y_train, X_test):
 def submission(best_fit, X, y, test):
     fit = RFClassifier.train(X, y, best_fit)
     y_pred = fit.predict_proba(test)
+    print fit.n_outputs
+    print fit.n_classes_
+    print fit.classes_
+    print len(y_pred)
+    pp.pprint(y_pred)
 
     results = pd.read_csv("data/sample_submission.csv")
 

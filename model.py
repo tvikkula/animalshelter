@@ -8,22 +8,22 @@ pp = pprint.PrettyPrinter(indent=4)
 
 
 X_test = pd.read_csv('data/test_data.csv')
-Y = pd.read_csv('data/train_labels.csv')
+Y = pd.read_csv('data/train_labels.csv', dtype='int32')
 X = pd.read_csv('data/train_data.csv')
 
 print('Creating training and validation sets')
-X_train, X_test, y_train, y_test = train_test_split(
+X_train1, X_test, y_train1, y_test = train_test_split(
     X, Y, test_size = 0.25, random_state = 42
 )
 
 X_train, X_validate, y_train, y_validate = train_test_split(
-    X_train, y_train, test_size = 0.2, random_state = 42
+    X_train1, y_train1, test_size = 0.2, random_state = 42
 )
 
 pred, res, best_fit = rfclassify(X_train, y_train, X_validate, y_validate, X_test)
 
 #pred2, res2 = adaclassify(X_train, y_train, X_test)
-from sklearn.metrics import classification_report, accuracy_score
+
 print(classification_report(y_test, res))
 print(accuracy_score(y_test, res))
 
