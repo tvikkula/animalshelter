@@ -15,7 +15,7 @@ def adaclassify(X_train, y_train, X_test):
 
 
 def submission(best_fit, X, y, test):
-    fit = RFClassifier.train(X, y, best_fit)
+    fit = ABClassifier.train(X, y, best_fit)
     y_pred = fit.predict_proba(test)
     print fit.n_outputs
     print fit.n_classes_
@@ -42,7 +42,7 @@ def submission(best_fit, X, y, test):
 def rfclassify(X_train, y_train, X_validate, y_validate, X_test):
     print('Hyperparam validation')
     best_fit, rf_grid_scores = RFClassifier.gridsearch(
-        X_validate, y_validate, n = 5
+        X_validate, y_validate, n = 100
     )
 
     print(best_fit)
@@ -52,10 +52,6 @@ def rfclassify(X_train, y_train, X_validate, y_validate, X_test):
 
     print('Evaluating accuracy')
     pred = fit.predict_proba(X_test)
-    fit.n_outputs = 1
-    print fit.n_outputs
-    pp.pprint(pred[0].shape)
-    print type(pred)
     res = fit.predict(X_test)
     print type(res)
     return pred, res, best_fit

@@ -18,6 +18,7 @@ def test(pred, labels_test):
     return accuracy_score(pred, labels_test)
                          
 def gridsearch(features_train, labels_train, n):
+    print labels_train.shape
     clf = RandomForestClassifier(
         n_estimators = n,
         n_jobs = -1

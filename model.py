@@ -8,21 +8,25 @@ pp = pprint.PrettyPrinter(indent=4)
 
 
 X_test = pd.read_csv('data/test_data.csv')
-Y = pd.read_csv('data/train_labels.csv', dtype='int32')
+Y = pd.read_csv('data/train_labels.csv')
 X = pd.read_csv('data/train_data.csv')
-
+pp.pprint(Y.values)
 print('Creating training and validation sets')
 X_train1, X_test, y_train1, y_test = train_test_split(
-    X, Y, test_size = 0.25, random_state = 42
+    X, Y, test_size = 0.20, random_state = 42
 )
 
 X_train, X_validate, y_train, y_validate = train_test_split(
-    X_train1, y_train1, test_size = 0.2, random_state = 42
+    X_train1, y_train1, test_size = 0.15, random_state = 42
 )
 
-pred, res, best_fit = rfclassify(X_train, y_train, X_validate, y_validate, X_test)
+# Ravel stuff:
+y_train = y_train.ravel()
+y_validate = y_validate.ravel()
 
-#pred2, res2 = adaclassify(X_train, y_train, X_test)
+#pred, res, best_fit = rfclassify(X_train, y_train.ravel(), X_validate, y_validate.ravel(), X_test)
+
+pred, res, best_fit = adaclassify(X_train, y_train, X_test)
 
 print(classification_report(y_test, res))
 print(accuracy_score(y_test, res))

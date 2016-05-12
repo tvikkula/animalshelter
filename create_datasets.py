@@ -12,44 +12,50 @@ labels = [
     'Died'
     ]
 
-features = [
+categories = [
     'isMix',
     'Breed_formatted',
     'Sex',
-    'Neutered'
+    'Neutered',
+    'AnimalType'
     ]
 
 predicted = 'OutcomeType'
 
 print('Creating feature and label sets to test and train')
 
-# Create dummies:
-features_train = pd.get_dummies(train.isMix, prefix='is')\
-    .join(pd.get_dummies(train.Sex, prefix='is'))\
-    .join(pd.get_dummies(train.Neutered, prefix='is'))
+labels_train = train['OutcomeType']
 
-#    .join(train.AgeInYears)
+train = train[categories]
+test = test[categories]
 
-#    .join(pd.get_dummies(train.Breed_formatted, prefix='is'))
+train["Train"] = 1
+test["Train"] = 0
 
-labels_train = pd.get_dummies(train.OutcomeType)
+combined = pd.concat([train, test])
+combined_dummies = pd.get_dummies(combined, columns=categories)
 
-features_test = pd.get_dummies(test.isMix, prefix='is')\
-    .join(pd.get_dummies(test.Sex, prefix='is'))\
-    .join(pd.get_dummies(test.Neutered, prefix='is'))
+train = combined_dummies[combined_dummies["Train"] == 1]
+test = combined_dummies[combined_dummies["Train"] == 0]
+train = train.drop(["Train"], axis=1)
+test = test.drop(["Train"], axis=1)
 
-#    .join(test.AgeInYears)
-#    .join(pd.get_dummies(test.Breed_formatted, prefix='is'))
-
-features_test.to_csv(
+print train.head(1)
+print test.head(1)
+print labels_train.head(1)
+print labels_train.shape
+print train.shape
+print test.shape
+test.to_csv(
     'data/test_data.csv',
     index=False
 )
 labels_train.to_csv(
     'data/train_labels.csv',
-    index=False
+    index=False,
+    header=True
 )
-features_train.to_csv(
+train.to_csv(
     'data/train_data.csv',
     index=False
 )
