@@ -18,7 +18,6 @@ def test(pred, labels_test):
     return accuracy_score(pred, labels_test)
                          
 def gridsearch(features_train, labels_train, n):
-    print labels_train.shape
     clf = RandomForestClassifier(
         n_estimators = n,
         n_jobs = -1
@@ -28,9 +27,10 @@ def gridsearch(features_train, labels_train, n):
         'min_samples_split': [1, 2, 5, 10, 20, 50],
         'max_features': ['sqrt', 'log2', None]
     }
-    clf = GridSearchCV(clf, param_grid, scoring='f1')
+    clf = GridSearchCV(clf, param_grid, scoring='log_loss')
     clf.fit(features_train, labels_train)
     scores = clf.grid_scores_
     # Sort by mean (note, it's using namedtuples)
     scores.sort(key=lambda x:x.mean_validation_score, reverse=True)
+    print(clf.best_estimator_)
     return clf.best_estimator_, scores

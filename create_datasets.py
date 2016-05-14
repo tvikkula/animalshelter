@@ -40,12 +40,6 @@ test = combined_dummies[combined_dummies["Train"] == 0]
 train = train.drop(["Train"], axis=1)
 test = test.drop(["Train"], axis=1)
 
-print train.head(1)
-print test.head(1)
-print labels_train.head(1)
-print labels_train.shape
-print train.shape
-print test.shape
 test.to_csv(
     'data/test_data.csv',
     index=False
