@@ -17,7 +17,8 @@ categories = [
     'Breed_formatted',
     'Sex',
     'Neutered',
-    'AnimalType'
+    'AnimalType',
+    'AgeInYears'
     ]
 
 predicted = 'OutcomeType'

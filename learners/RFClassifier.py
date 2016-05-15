@@ -6,10 +6,13 @@ pp = pprint.PrettyPrinter(indent=4)
 
 def train(features_train, labels_train, rfc = None):
     if (rfc == None):
+        # RFC that is found previously using GridSearch:
         rfc = RandomForestClassifier(
-            n_estimators = 2, min_samples_split = 2,
-            n_jobs = -1, criterion = 'entropy',
-            max_features = None
+            bootstrap=True, compute_importances=None,
+            criterion='gini', max_depth=None, max_features='log2',
+            max_leaf_nodes=None, min_density=None, min_samples_leaf=1,
+            min_samples_split=50, n_estimators=400, n_jobs=-1,
+            oob_score=False, random_state=None, verbose=0
         )
     fit = rfc.fit(features_train, labels_train)
     return fit 

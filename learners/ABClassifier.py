@@ -8,7 +8,7 @@ pp = pprint.PrettyPrinter(indent=4)
 def train(features_train, labels_train):
     abc = AdaBoostClassifier(
         DecisionTreeClassifier(max_depth=2),
-        n_estimators=600,
+        n_estimators=20,
         learning_rate=1
     )
     print features_train.shape

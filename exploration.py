@@ -18,11 +18,21 @@ def isMix(x):
     else: return 'mixUnknown'
 
 
-def formatBreed(x):
+def formatMixBreed(x):
     if x.lower().find('mix') > 0: return x.replace(' Mix', '')
     if x.find('/'): return x.split('/', 1)[0]
     else: return x
 
+
+def getFrequentBreeds(train):
+    vc = train['Breed_formatted'].value_counts()
+    return vc[vc > 150].index.values
+
+
+def formatBreedGroups(x, breeds):
+    x = str(x)
+    if x in breeds: return x
+    else: return 'Exotic'
 
 def get_sex(x):
     x = str(x)
@@ -55,11 +65,15 @@ test['Sex'] = test.SexuponOutcome.apply(get_sex)
 test['Neutered'] = test.SexuponOutcome.apply(get_neutered)
 train['AgeInYears'] = train.AgeuponOutcome.apply(format_age)
 test['AgeInYears'] = test.AgeuponOutcome.apply(format_age)
-train['Breed_formatted'] = train.Breed.apply(formatBreed)
+train['Breed_formatted'] = train.Breed.apply(formatMixBreed)
 train['isMix'] = train.Breed.apply(isMix)
-test['Breed_formatted'] = test.Breed.apply(formatBreed)
+test['Breed_formatted'] = test.Breed.apply(formatMixBreed)
 test['isMix'] = test.Breed.apply(isMix)
-
+breeds = getFrequentBreeds(train)
+train['Breed_formatted'] =\
+    train.Breed_formatted.apply(formatBreedGroups, args = (breeds,))
+test['Breed_formatted'] =\
+    test.Breed_formatted.apply(formatBreedGroups, args = (breeds,))
 train.to_csv('data/train_cleaned.csv', index=False)
 test.to_csv('data/test_cleaned.csv', index=False)
 

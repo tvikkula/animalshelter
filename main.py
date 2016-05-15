@@ -12,7 +12,7 @@ def read_data(test):
     if test:
         from sklearn.cross_validation import train_test_split
         X_train, X_test, y_train, y_test = train_test_split(
-            X, Y, test_size=0.25
+            X, Y, test_size=0.25, random_state = 42
         )
         # dummify y_test:
         y_test = pd.DataFrame(y_test)
@@ -25,9 +25,13 @@ def read_data(test):
 
 
 def ada(test):
-    X, Y, X_test = read_data(test)
+    X, Y, X_test, y_test = read_data(test)
     fit = ABClassifier.train(X, Y)
-    submission(X_test, fit)
+    if test:
+        from evaluation import logloss
+        print(logloss(X_test, y_test, fit))
+    else:
+        submission(X_test, fit)
 
 
 def rf(test):
@@ -35,10 +39,14 @@ def rf(test):
 
     # Can you training set for hyperparam validation
     # in Sklearn for certain algs, including RandomForestClassification.
+    '''
+    Let's not do this on every iteration:
+
     best_fit, rf_grid_scores = RFClassifier.gridsearch(
-        X, Y, n=500
+        X, Y, n = 100
     )
-    fit = RFClassifier.train(X, Y, best_fit)
+    '''
+    fit = RFClassifier.train(X, Y)
     if test:
         from evaluation import logloss
         print(logloss(X_test, y_test, fit))
