@@ -4,6 +4,7 @@ from sklearn.grid_search import GridSearchCV
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
+
 def train(features_train, labels_train, rfc = None):
     if (rfc == None):
         # RFC that is found previously using GridSearch:
@@ -17,9 +18,11 @@ def train(features_train, labels_train, rfc = None):
     fit = rfc.fit(features_train, labels_train)
     return fit 
 
+
 def test(pred, labels_test):
     return accuracy_score(pred, labels_test)
-                         
+
+
 def gridsearch(features_train, labels_train, n):
     clf = RandomForestClassifier(
         n_estimators = n,

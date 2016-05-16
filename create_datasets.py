@@ -12,7 +12,7 @@ labels = [
     'Died'
     ]
 
-categories = [
+features = [
     'isMix',
     'Breed_formatted',
     'Sex',
@@ -21,25 +21,34 @@ categories = [
     'AgeInYears'
     ]
 
+dummies = [
+    'isMix',
+    'Breed_formatted',
+    'Sex',
+    'Neutered',
+    'AnimalType'
+    ]
+
 predicted = 'OutcomeType'
 
-print('Creating feature and label sets to test and train')
+labels_train = train[predicted]
 
-labels_train = train['OutcomeType']
-
-train = train[categories]
-test = test[categories]
+train = train[features]
+test = test[features]
 
 train["Train"] = 1
 test["Train"] = 0
 
 combined = pd.concat([train, test])
-combined_dummies = pd.get_dummies(combined, columns=categories)
+combined_dummies = pd.get_dummies(combined, columns=dummies)
 
 train = combined_dummies[combined_dummies["Train"] == 1]
 test = combined_dummies[combined_dummies["Train"] == 0]
 train = train.drop(["Train"], axis=1)
 test = test.drop(["Train"], axis=1)
+
+train = pd.DataFrame(train)
+test = pd.DataFrame(test)
 
 test.to_csv(
     'data/test_data.csv',

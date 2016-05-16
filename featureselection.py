@@ -29,10 +29,17 @@ def getFrequentBreeds(train):
     return vc[vc > 150].index.values
 
 
+def scaleFeature(column):
+    mins = np.min(column, axis=0)
+    maxs = np.max(column, axis=0)
+    return (column - mins) / (maxs - mins)
+
+
 def formatBreedGroups(x, breeds):
     x = str(x)
     if x in breeds: return x
     else: return 'Exotic'
+
 
 def get_sex(x):
     x = str(x)
@@ -65,6 +72,8 @@ test['Sex'] = test.SexuponOutcome.apply(get_sex)
 test['Neutered'] = test.SexuponOutcome.apply(get_neutered)
 train['AgeInYears'] = train.AgeuponOutcome.apply(format_age)
 test['AgeInYears'] = test.AgeuponOutcome.apply(format_age)
+train['AgeInYears'] = scaleFeature(train['AgeInYears'])
+test['AgeInYears'] = scaleFeature(test['AgeInYears'])
 train['Breed_formatted'] = train.Breed.apply(formatMixBreed)
 train['isMix'] = train.Breed.apply(isMix)
 test['Breed_formatted'] = test.Breed.apply(formatMixBreed)
@@ -74,6 +83,7 @@ train['Breed_formatted'] =\
     train.Breed_formatted.apply(formatBreedGroups, args = (breeds,))
 test['Breed_formatted'] =\
     test.Breed_formatted.apply(formatBreedGroups, args = (breeds,))
+
 train.to_csv('data/train_cleaned.csv', index=False)
 test.to_csv('data/test_cleaned.csv', index=False)
 
