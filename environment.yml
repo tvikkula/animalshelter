@@ -1,0 +1,20 @@
+name: data-tommi
+dependencies:
+- mkl=11.3.3=0
+- numpy=1.11.0=py27_1
+- openssl=1.0.2h=0
+- pandas=0.18.1=np111py27_0
+- pip=8.1.1=py27_1
+- python=2.7.11=0
+- python-dateutil=2.5.3=py27_0
+- pytz=2016.4=py27_0
+- readline=6.2=2
+- scikit-learn=0.17.1=np111py27_1
+- scipy=0.17.1=np111py27_0
+- setuptools=20.7.0=py27_0
+- six=1.10.0=py27_0
+- sqlite=3.9.2=0
+- tk=8.5.18=0
+- wheel=0.29.0=py27_0
+- zlib=1.2.8=0
+
