@@ -5,19 +5,19 @@ from sklearn.grid_search import GridSearchCV
 import numpy as np
 
 
-def train(features_train, labels_train, svc = None):
+def train(X_train, y_train, svc = None):
     if (svc == None):
         svc = SVC(kernel = 'linear', gamma = 0.0005, C = 500)
-    fit = svc.fit(features_train, labels_train)
+    fit = svc.fit(X_train, y_train)
     return fit
 
 
-def test(features_test, labels_test, fit):
-    pred = fit.predict(features_test)
-    return accuracy_score(pred, labels_test)
+def test(X_test, y_test, fit):
+    pred = fit.predict(X_test)
+    return accuracy_score(pred, y_test)
 
 
-def gridsearch(features_train, labels_train):
+def gridsearch(X_train, y_train):
     svc = SVC(class_weight='auto', probability=True)
     param_grid = {
         'kernel': ['linear', 'rbf', 'poly'],
@@ -25,10 +25,11 @@ def gridsearch(features_train, labels_train):
         'gamma': [0.0005, 0.001, 0.005, 0.01, 0.1, 1, 10]
     }
     clf = GridSearchCV(svc, param_grid, scoring='log_loss')
-    clf.fit(features_train, labels_train)
+    clf.fit(X_train, y_train)
     scores = clf.grid_scores_
     # Sort by mean (note, it's using namedtuples)
     scores.sort(key=lambda x:x.mean_validation_score, reverse=True)
+    print(clf.best_estimator_)
     return clf.best_estimator_, scores
 
 

@@ -1,9 +1,5 @@
 import sys
-sys.path.append('learners')
-import PCA
-import RFClassifier
-import ABClassifier
-import ClassifySVM
+from learners import PCA, RFClassifier, ABClassifier, ClassifySVM, XGBClassifier
 from submission import *
 import pandas as pd
 import pprint
@@ -26,6 +22,16 @@ def read_data(test):
         X_test = pd.read_csv('data/test_data.csv')
         y_test = None
         return X, Y, X_test, y_test
+
+
+def xgb(test):
+    X, Y, X_test, y_test = read_data(test)
+    fit = XGBClassifier.train(X, Y)
+    if test:
+        from evaluation import logloss
+        print(logloss(X_test, y_test, fit))
+    else:
+        submission(X_test, fit)
 
 
 def ada(test):
@@ -63,12 +69,12 @@ def rf(test):
 
 def svm(test):
     X, Y, X_test, y_test = read_data(test)
-
+    '''
     best_fit, rf_grid_scores = ClassifySVM.gridsearch(
         X, Y
     )
-
-    fit = ClassifySVM.train(X, Y, best_fit)
+    '''
+    fit = ClassifySVM.train(X, Y)
     if test:
         from evaluation import logloss
         print(logloss(X_test, y_test, fit))
@@ -86,7 +92,7 @@ def main(argv):
     elif len(argv) > 1 and argv[1] == 'ada':
         ada(test)
     else:
-        svm(test = True)
+        xgb(test = True)
 
 
 if __name__ == "__main__":

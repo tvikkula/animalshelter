@@ -5,7 +5,7 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 
-def train(features_train, labels_train):
+def train(X_train, y_train):
     abc = AdaBoostClassifier(
         RandomForestClassifier(
             bootstrap=True, compute_importances=None,
@@ -17,9 +17,9 @@ def train(features_train, labels_train):
         n_estimators=100,
         learning_rate=0.2
     )
-    fit = abc.fit(features_train, labels_train)
+    fit = abc.fit(X_train, y_train)
     return fit
 
 
-def test(pred, labels_test):
-    return accuracy_score(pred, labels_test)
+def test(pred, y_test):
+    return accuracy_score(pred, y_test)
