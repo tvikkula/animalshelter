@@ -1,1 +1,1 @@
-docker run purplerain -v ./:/code/ python /code/main.py
+docker run -v $PWD:/code purplerain python /code/main.py
