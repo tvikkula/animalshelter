@@ -1,7 +1,7 @@
-FROM rothnic/tinyconda:onbuild-latest
+FROM continuumio/miniconda
 
-# for click example
-ENV LC_ALL=C.UTF-8
-ENV LANG=C.UTF-8
-
-CMD ["/app/app.py"]
+RUN export LC_ALL=en_US.UTF-8
+RUN export LANG=en_US.UTF-8
+RUN mkdir /code
+ADD ./requirements.txt /code/
+RUN conda create -n data-tommi --file /code/requirements.txt
