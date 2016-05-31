@@ -4,5 +4,6 @@ RUN export LANG=en_US.UTF-8
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 RUN mkdir /code
 ADD ./requirements.txt /code/
-RUN conda create -n purplerain --file /code/requirements.txt
-RUN source activate purplerain
+RUN conda install --file /code/requirements.txt
+RUN pip install xgboost
+WORKDIR /code
